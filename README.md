@@ -2,6 +2,20 @@
 
 Ein leichtgewichtiger Cookie Consent Manager als einzelnes JavaScript-File. Entwickelt für den Agentur-Einsatz auf Webflow, WordPress und Next.js. Kein Build-Step, keine Dependencies, ca. 10 KB minified.
 
+> ## ⚠️ NOT FOR PROFESSIONAL USE WITHOUT REVIEW
+>
+> Dieses Plugin ist ein **technisches Hilfsmittel ohne Gewährleistung**. Es ersetzt keine
+> rechtliche Prüfung, keine Cookie-Inventur und keine Datenschutzerklärung. Die
+> rechtskonforme Konfiguration (insb. Auswahl des Modus, Kategorien-Mapping, Embed-Markierung,
+> Privacy-URL) **liegt vollständig in der Verantwortung des Einbinders**. Bei kommerzieller
+> Nutzung — insbesondere bei Auftragsarbeiten für Dritte — empfehlen wir vor Produktiveinsatz
+> eine rechtliche Prüfung durch einen qualifizierten Anwalt sowie einen entsprechenden
+> Werkvertrag mit dem Endkunden.
+>
+> Mit dem Setzen von `data-acknowledged="true"` am Script-Tag bestätigst du, diesen Hinweis
+> sowie die [LICENSE](./LICENSE) gelesen und akzeptiert zu haben. Fehlt das Attribut, wird
+> beim Laden eine Warnung in der Browser-Konsole ausgegeben.
+
 - **Zwei Compliance-Modi** — `ch` (nDSG, informativ) und `eu` (DSGVO, Opt-in)
 - **Vier Standard-Kategorien** — Notwendig, Präferenzen, Statistiken, Marketing
 - **Google Analytics Consent Mode v2** integriert
@@ -16,13 +30,14 @@ Script-Tag im `<head>` einbinden:
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@1.0.0/cc-plugin.min.js"
+  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@1.0.1/cc-plugin.min.js"
   data-mode="ch"
   data-lang="de"
   data-accent="#2563eb"
   data-position="bottom"
   data-privacy-url="/datenschutz"
   data-ga-id="G-XXXXXXXX"
+  data-acknowledged="true"
 ></script>
 ```
 
@@ -38,6 +53,7 @@ Alle Optionen werden als `data-*` Attribute am Script-Tag gesetzt.
 | `data-position` | `bottom` \| `top` \| `bottom-left` \| `bottom-right` | `bottom` | Position und Größe |
 | `data-privacy-url` | URL | `/datenschutz` | Link zur Datenschutzerklärung |
 | `data-ga-id` | GA4 Measurement ID | — | Optional: aktiviert Consent Mode v2 |
+| `data-acknowledged` | `true` | — | Bestätigt Kenntnisnahme von [LICENSE](./LICENSE) und Disclaimer. Ohne dieses Attribut erscheint eine Warnung in der Browser-Konsole. |
 
 ### Position und Größe
 
@@ -130,11 +146,23 @@ document.addEventListener('cc:change', function (e) {
 });
 ```
 
+## Datenschutzerklärung-Vorlage
+
+Folgender Textbaustein kann (in angepasster Form) in die Datenschutzerklärung der einbindenden Website übernommen werden, um den Einsatz des Plugins zu dokumentieren:
+
+> ### Cookie-Einwilligungs-Management
+>
+> Diese Website nutzt **cc-plugin** (Open Source, MIT-Lizenz, [github.com/alahji7/cc-plugin](https://github.com/alahji7/cc-plugin)) zur Verwaltung Ihrer Einwilligung in den Einsatz von Cookies und ähnlichen Technologien. Das Plugin wird über das öffentliche Content Delivery Network jsDelivr (jsDelivr Ltd., GB) ausgeliefert; dabei wird Ihre IP-Adresse technisch bedingt an den CDN-Provider übermittelt. Die Verarbeitung erfolgt zur Bereitstellung der Website ([Art. 6 Abs. 1 lit. f DSGVO](https://dsgvo-gesetz.de/art-6-dsgvo/) bzw. Art. 31 nDSG, berechtigtes Interesse).
+>
+> Ihre Einwilligungs-Entscheidung wird ausschließlich lokal in Ihrem Browser (`localStorage`, Schlüssel `cc_consent`) für 30 Tage gespeichert und **nicht an Server übertragen**. Sie können Ihre Auswahl jederzeit über den Link „Cookie-Einstellungen" im Footer anpassen oder durch Löschen Ihrer Browserdaten zurücksetzen.
+
+Anpassen pro Kunde: ggf. Hinweis auf eingebundene Drittanbieter (Google Analytics, YouTube, Google Maps etc.) ergänzen, je nach tatsächlicher Konfiguration.
+
 ## Versioning
 
 Das Plugin folgt [Semantic Versioning](https://semver.org/lang/de/). Versionen werden über Git-Tags veröffentlicht und sind über jsDelivr unveränderlich abrufbar:
 
-- **Pinned (empfohlen):** `@1.0.0` — fixe Version, ändert sich nie
+- **Pinned (empfohlen):** `@1.0.1` — fixe Version, ändert sich nie
 - **Major-pinned:** `@1` — automatische Patch-Updates innerhalb der Major-Version
 
 Siehe [CHANGELOG.md](./CHANGELOG.md) für die Versionshistorie.

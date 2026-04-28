@@ -1,4 +1,4 @@
-/* cc-plugin v1.0.0 | MIT | https://github.com/alahji7/cc-plugin */
+/* cc-plugin v1.0.1 | MIT | https://github.com/alahji7/cc-plugin */
 (function () {
   'use strict';
 
@@ -24,8 +24,17 @@
     accent: d.accent || '#2563eb',
     position: ['bottom', 'top', 'bottom-left', 'bottom-right'].indexOf(d.position) !== -1 ? d.position : 'bottom',
     privacyUrl: d.privacyUrl || '/datenschutz',
-    gaId: d.gaId || ''
+    gaId: d.gaId || '',
+    acknowledged: d.acknowledged === 'true'
   });
+
+  if (!config.acknowledged && typeof console !== 'undefined' && console.warn) {
+    console.warn(
+      '[cc-plugin] Hinweis: data-acknowledged="true" fehlt am Script-Tag. ' +
+      'Bitte LICENSE und Disclaimer lesen und das Attribut setzen, um Kenntnisnahme zu bestätigen. ' +
+      'Details: https://github.com/alahji7/cc-plugin#-not-for-professional-use-without-review'
+    );
+  }
 
   var STORAGE_KEY = 'cc_consent';
   var CONSENT_VERSION = 1;
