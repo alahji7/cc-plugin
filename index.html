@@ -29,6 +29,7 @@
   <div class="controls">
     <strong style="margin-right: 8px; align-self: center;">Modus:</strong>
     <button data-mode="ch">CH (nDSG)</button>
+    <button data-mode="ch-marketing">CH + Marketing</button>
     <button data-mode="eu">EU (DSGVO)</button>
     <strong style="margin-right: 8px; margin-left: 16px; align-self: center;">Sprache:</strong>
     <button data-lang="de">DE</button>
@@ -75,15 +76,18 @@
   <script>
     (function () {
       var params = new URLSearchParams(location.search);
-      var mode = params.get('mode') || 'eu';
+      var modeParam = params.get('mode') || 'eu';
+      // ch-marketing ist eine Sandbox-Convenience: setzt mode=ch + allowMarketing=true
+      var actualMode = modeParam === 'ch-marketing' ? 'ch' : modeParam;
+      var allowMarketing = modeParam === 'ch-marketing';
       var lang = params.get('lang') || 'de';
       var position = params.get('position') || 'bottom';
 
-      document.getElementById('current-mode').textContent = mode;
+      document.getElementById('current-mode').textContent = modeParam;
       document.getElementById('current-lang').textContent = lang;
       document.getElementById('current-position').textContent = position;
       document.querySelectorAll('button[data-mode]').forEach(function (b) {
-        if (b.dataset.mode === mode) b.classList.add('active');
+        if (b.dataset.mode === modeParam) b.classList.add('active');
         b.addEventListener('click', function () {
           try { localStorage.removeItem('cc_consent'); } catch (e) {}
           params.set('mode', b.dataset.mode);
@@ -112,12 +116,13 @@
 
       var s = document.createElement('script');
       s.src = 'cc-plugin.js';
-      s.setAttribute('data-mode', mode);
+      s.setAttribute('data-mode', actualMode);
       s.setAttribute('data-lang', lang);
       s.setAttribute('data-accent', '#2563eb');
       s.setAttribute('data-position', position);
       s.setAttribute('data-privacy-url', '/datenschutz');
       s.setAttribute('data-acknowledged', 'true');
+      if (allowMarketing) s.setAttribute('data-allow-marketing', 'true');
       document.head.appendChild(s);
 
       function refreshStatus() {

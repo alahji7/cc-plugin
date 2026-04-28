@@ -1,4 +1,4 @@
-/* cc-plugin v1.0.1 | MIT | https://github.com/alahji7/cc-plugin */
+/* cc-plugin v1.1.1 | MIT | https://github.com/alahji7/cc-plugin */
 (function () {
   'use strict';
 
@@ -25,7 +25,8 @@
     position: ['bottom', 'top', 'bottom-left', 'bottom-right'].indexOf(d.position) !== -1 ? d.position : 'bottom',
     privacyUrl: d.privacyUrl || '/datenschutz',
     gaId: d.gaId || '',
-    acknowledged: d.acknowledged === 'true'
+    acknowledged: d.acknowledged === 'true',
+    allowMarketing: d.allowMarketing === 'true'
   });
 
   if (!config.acknowledged && typeof console !== 'undefined' && console.warn) {
@@ -48,6 +49,8 @@
     de: {
       chTitle: 'Datenschutzhinweis',
       chBody: 'Diese Website verwendet Cookies, um Ihnen das beste Erlebnis zu bieten.',
+      chBodyMarketing: 'Diese Website verwendet Cookies für Statistik und Marketing. Sie können einzelne Kategorien jederzeit deaktivieren.',
+      marketingDescDetailed: 'Personalisierte Werbung und Cross-Site-Profiling (z.B. Meta Pixel).',
       euTitle: 'Wir verwenden Cookies',
       euBody: 'Wir nutzen Cookies und ähnliche Technologien, um Inhalte und Funktionen bereitzustellen. Sie können selbst entscheiden, welche Kategorien Sie zulassen möchten.',
       privacyLink: 'Datenschutzerklärung',
@@ -56,14 +59,14 @@
       rejectAll: 'Alles ablehnen',
       settings: 'Einstellungen',
       saveSelection: 'Auswahl speichern',
-      necessary: 'Notwendig',
-      necessaryDesc: 'Erforderlich für Login, Warenkorb und Sicherheit.',
-      preferences: 'Präferenzen',
-      preferencesDesc: 'Sprache, Region und gespeicherte Einstellungen.',
-      statistics: 'Statistiken',
-      statisticsDesc: 'Anonyme Nutzungsstatistik (z.B. Google Analytics).',
-      marketing: 'Marketing',
-      marketingDesc: 'Personalisierte Werbung und Retargeting.',
+      necessary: 'Notwendige Cookies zulassen',
+      necessaryDesc: 'Unverzichtbar für die Funktionalität der Website.',
+      preferences: 'Präferenz-Cookies zulassen',
+      preferencesDesc: 'Speichern Ihrer Sprache, Region und Einstellungen.',
+      statistics: 'Statistik-Cookies zulassen',
+      statisticsDesc: 'Helfen uns, unsere Website zu verbessern.',
+      marketing: 'Marketing-Cookies zulassen',
+      marketingDesc: 'Personalisierte Werbung.',
       placeholderTitle: 'Externer Inhalt',
       placeholderBody: 'Dieser Inhalt wird von einem Drittanbieter bereitgestellt. Mit dem Laden akzeptieren Sie die entsprechenden Cookies.',
       loadContent: 'Inhalt laden'
@@ -71,6 +74,8 @@
     en: {
       chTitle: 'Privacy notice',
       chBody: 'This website uses cookies to provide you with the best experience.',
+      chBodyMarketing: 'This website uses cookies for statistics and marketing. You can disable individual categories at any time.',
+      marketingDescDetailed: 'Personalised advertising and cross-site profiling (e.g. Meta Pixel).',
       euTitle: 'We use cookies',
       euBody: 'We use cookies and similar technologies to provide content and features. You can choose which categories to allow.',
       privacyLink: 'Privacy policy',
@@ -79,14 +84,14 @@
       rejectAll: 'Reject all',
       settings: 'Settings',
       saveSelection: 'Save selection',
-      necessary: 'Necessary',
-      necessaryDesc: 'Required for login, cart and security.',
-      preferences: 'Preferences',
-      preferencesDesc: 'Language, region and saved settings.',
-      statistics: 'Statistics',
-      statisticsDesc: 'Anonymous usage tracking (e.g. Google Analytics).',
-      marketing: 'Marketing',
-      marketingDesc: 'Personalised advertising and retargeting.',
+      necessary: 'Allow necessary cookies',
+      necessaryDesc: 'Essential for the website to function.',
+      preferences: 'Allow preference cookies',
+      preferencesDesc: 'Save your language, region and settings.',
+      statistics: 'Allow statistics cookies',
+      statisticsDesc: 'Help us improve our website.',
+      marketing: 'Allow marketing cookies',
+      marketingDesc: 'Personalised advertising.',
       placeholderTitle: 'External content',
       placeholderBody: 'This content is provided by a third party. Loading it accepts the related cookies.',
       loadContent: 'Load content'
@@ -94,6 +99,8 @@
     fr: {
       chTitle: 'Avis de confidentialité',
       chBody: 'Ce site utilise des cookies pour vous offrir la meilleure expérience.',
+      chBodyMarketing: 'Ce site utilise des cookies à des fins statistiques et marketing. Vous pouvez désactiver chaque catégorie à tout moment.',
+      marketingDescDetailed: 'Publicité personnalisée et profilage entre sites (p.ex. Meta Pixel).',
       euTitle: 'Nous utilisons des cookies',
       euBody: 'Nous utilisons des cookies et des technologies similaires pour fournir du contenu et des fonctionnalités. Vous pouvez choisir les catégories à autoriser.',
       privacyLink: 'Politique de confidentialité',
@@ -102,14 +109,14 @@
       rejectAll: 'Tout refuser',
       settings: 'Paramètres',
       saveSelection: 'Enregistrer la sélection',
-      necessary: 'Nécessaires',
-      necessaryDesc: 'Requis pour la connexion, le panier et la sécurité.',
-      preferences: 'Préférences',
-      preferencesDesc: 'Langue, région et paramètres enregistrés.',
-      statistics: 'Statistiques',
-      statisticsDesc: 'Suivi d’utilisation anonyme (p.ex. Google Analytics).',
-      marketing: 'Marketing',
-      marketingDesc: 'Publicité personnalisée et reciblage.',
+      necessary: 'Autoriser les cookies nécessaires',
+      necessaryDesc: 'Indispensables au fonctionnement du site.',
+      preferences: 'Autoriser les cookies de préférences',
+      preferencesDesc: 'Enregistrer votre langue, région et préférences.',
+      statistics: 'Autoriser les cookies statistiques',
+      statisticsDesc: 'Nous aident à améliorer notre site.',
+      marketing: 'Autoriser les cookies marketing',
+      marketingDesc: 'Publicité personnalisée.',
       placeholderTitle: 'Contenu externe',
       placeholderBody: 'Ce contenu est fourni par un tiers. Le charger accepte les cookies associés.',
       loadContent: 'Charger le contenu'
@@ -117,6 +124,8 @@
     it: {
       chTitle: 'Informativa sulla privacy',
       chBody: 'Questo sito utilizza cookie per offrirti la migliore esperienza.',
+      chBodyMarketing: 'Questo sito utilizza cookie a fini statistici e di marketing. Puoi disattivare singole categorie in qualsiasi momento.',
+      marketingDescDetailed: 'Pubblicità personalizzata e profilazione tra siti (es. Meta Pixel).',
       euTitle: 'Utilizziamo i cookie',
       euBody: 'Utilizziamo cookie e tecnologie simili per fornire contenuti e funzionalità. Puoi scegliere quali categorie consentire.',
       privacyLink: 'Informativa sulla privacy',
@@ -125,14 +134,14 @@
       rejectAll: 'Rifiuta tutto',
       settings: 'Impostazioni',
       saveSelection: 'Salva selezione',
-      necessary: 'Necessari',
-      necessaryDesc: 'Richiesti per login, carrello e sicurezza.',
-      preferences: 'Preferenze',
-      preferencesDesc: 'Lingua, regione e impostazioni salvate.',
-      statistics: 'Statistiche',
-      statisticsDesc: 'Tracciamento anonimo (es. Google Analytics).',
-      marketing: 'Marketing',
-      marketingDesc: 'Pubblicità personalizzata e retargeting.',
+      necessary: 'Consenti i cookie necessari',
+      necessaryDesc: 'Indispensabili per il funzionamento del sito.',
+      preferences: 'Consenti i cookie di preferenza',
+      preferencesDesc: 'Salvano lingua, regione e impostazioni.',
+      statistics: 'Consenti i cookie di statistica',
+      statisticsDesc: 'Ci aiutano a migliorare il sito.',
+      marketing: 'Consenti i cookie di marketing',
+      marketingDesc: 'Pubblicità personalizzata.',
       placeholderTitle: 'Contenuto esterno',
       placeholderBody: 'Questo contenuto è fornito da terzi. Caricarlo accetta i cookie correlati.',
       loadContent: 'Carica contenuto'
@@ -254,18 +263,17 @@
       '#cc-banner button:hover{border-color:var(--cc-accent)}',
       '#cc-banner button.cc-primary{background:var(--cc-accent);color:#fff;border-color:var(--cc-accent)}',
       '#cc-banner button.cc-primary:hover{filter:brightness(1.1)}',
-      '#cc-banner .cc-categories{margin:16px 0 8px;border-top:1px solid var(--cc-border);padding-top:16px}',
-      '#cc-banner .cc-cat{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--cc-border)}',
-      '#cc-banner .cc-cat:last-child{border-bottom:none}',
-      '#cc-banner .cc-cat-info{flex:1;min-width:0}',
-      '#cc-banner .cc-cat-name{font-weight:600;margin-bottom:2px}',
-      '#cc-banner .cc-cat-desc{color:var(--cc-muted);font-size:13px}',
-      '#cc-banner .cc-toggle{position:relative;flex-shrink:0;width:40px;height:22px;display:inline-block;cursor:pointer;margin-top:2px}',
+      '#cc-banner .cc-categories{margin:16px 0 8px;padding:16px;border:1px solid var(--cc-border);border-radius:8px}',
+      '#cc-banner .cc-cat{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}',
+      '#cc-banner .cc-cat:last-child{margin-bottom:0}',
+      '#cc-banner .cc-cat-name{flex:1;font-weight:300;font-size:14px;color:var(--cc-muted)}',
+      '#cc-banner .cc-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}',
+      '#cc-banner .cc-toggle{position:relative;flex-shrink:0;width:44px;height:24px;display:inline-block;cursor:pointer}',
       '#cc-banner .cc-toggle input{opacity:0;width:0;height:0;position:absolute}',
-      '#cc-banner .cc-toggle .cc-slider{position:absolute;inset:0;background:#cbd5e1;border-radius:22px;transition:.2s}',
-      '#cc-banner .cc-toggle .cc-slider:before{content:"";position:absolute;left:2px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s}',
+      '#cc-banner .cc-toggle .cc-slider{position:absolute;inset:0;background:#e5e7eb;border-radius:12px;transition:.2s}',
+      '#cc-banner .cc-toggle .cc-slider:before{content:"";position:absolute;left:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}',
       '#cc-banner .cc-toggle input:checked + .cc-slider{background:var(--cc-accent)}',
-      '#cc-banner .cc-toggle input:checked + .cc-slider:before{transform:translateX(18px)}',
+      '#cc-banner .cc-toggle input:checked + .cc-slider:before{transform:translateX(20px)}',
       '#cc-banner .cc-toggle input:disabled + .cc-slider{opacity:.5;cursor:not-allowed}',
       '#cc-banner .cc-customize{display:none}',
       '#cc-banner.cc-show-customize .cc-customize{display:block}',
@@ -296,22 +304,21 @@
   // ────────────────────────────────────────────────────────────────────
   var bannerEl = null;
 
-  function buildCategoryRow(key, isNecessary, checked) {
+  function buildCategoryRow(key, isNecessary, checked, descOverride) {
     var row = document.createElement('div');
     row.className = 'cc-cat';
+    var description = descOverride || t[key + 'Desc'];
+    row.title = description;
 
-    var info = document.createElement('div');
-    info.className = 'cc-cat-info';
+    var nameLabel = document.createElement('span');
+    nameLabel.className = 'cc-cat-name';
+    nameLabel.textContent = t[key];
+    row.appendChild(nameLabel);
 
-    var name = document.createElement('div');
-    name.className = 'cc-cat-name';
-    name.textContent = t[key];
-    info.appendChild(name);
-
-    var desc = document.createElement('div');
-    desc.className = 'cc-cat-desc';
-    desc.textContent = t[key + 'Desc'];
-    info.appendChild(desc);
+    var srDesc = document.createElement('span');
+    srDesc.className = 'cc-sr-only';
+    srDesc.textContent = description;
+    row.appendChild(srDesc);
 
     var label = document.createElement('label');
     label.className = 'cc-toggle';
@@ -328,7 +335,6 @@
     label.appendChild(input);
     label.appendChild(slider);
 
-    row.appendChild(info);
     row.appendChild(label);
     return row;
   }
@@ -350,15 +356,21 @@
     title.textContent = config.mode === 'ch' ? t.chTitle : t.euTitle;
     el.appendChild(title);
 
+    var bodyText;
+    if (config.mode === 'ch') {
+      bodyText = config.allowMarketing ? t.chBodyMarketing : t.chBody;
+    } else {
+      bodyText = t.euBody;
+    }
     var body = document.createElement('p');
-    body.textContent = (config.mode === 'ch' ? t.chBody : t.euBody) + ' ';
+    body.textContent = bodyText + ' ';
     var link = document.createElement('a');
     link.href = config.privacyUrl;
     link.textContent = t.privacyLink;
     body.appendChild(link);
     el.appendChild(body);
 
-    if (config.mode === 'ch') {
+    if (config.mode === 'ch' && !config.allowMarketing) {
       var chActions = document.createElement('div');
       chActions.className = 'cc-actions';
       var acceptBtn = document.createElement('button');
@@ -369,6 +381,73 @@
       });
       chActions.appendChild(acceptBtn);
       el.appendChild(chActions);
+    } else if (config.mode === 'ch' && config.allowMarketing) {
+      // CH-Modus mit Marketing-Opt-in: 3-Button-Layout + Customize-Panel
+      var chmActions = document.createElement('div');
+      chmActions.className = 'cc-actions cc-default-actions';
+
+      var chmRejectBtn = document.createElement('button');
+      chmRejectBtn.textContent = t.rejectAll;
+      chmRejectBtn.addEventListener('click', function () {
+        applyConsent({ necessary: true, preferences: false, statistics: false, marketing: false });
+      });
+
+      var chmSettingsBtn = document.createElement('button');
+      chmSettingsBtn.textContent = t.settings;
+      chmSettingsBtn.addEventListener('click', function () {
+        el.classList.add('cc-show-customize');
+      });
+
+      var chmAcceptBtn = document.createElement('button');
+      chmAcceptBtn.className = 'cc-primary';
+      chmAcceptBtn.textContent = t.acceptAll;
+      chmAcceptBtn.addEventListener('click', function () {
+        applyConsent({ necessary: true, preferences: true, statistics: true, marketing: true });
+      });
+
+      chmActions.appendChild(chmRejectBtn);
+      chmActions.appendChild(chmSettingsBtn);
+      chmActions.appendChild(chmAcceptBtn);
+      el.appendChild(chmActions);
+
+      var chmCustomize = document.createElement('div');
+      chmCustomize.className = 'cc-customize';
+
+      var chmCats = document.createElement('div');
+      chmCats.className = 'cc-categories';
+      chmCats.appendChild(buildCategoryRow('necessary', true, true));
+      // Statistics: im CH-Modus default-on (entspricht getDefaults('ch'))
+      chmCats.appendChild(buildCategoryRow('statistics', false, current.statistics));
+      // Marketing: default-off, ausführlichere Beschreibung wegen Profiling-Charakter
+      chmCats.appendChild(buildCategoryRow('marketing', false, current.marketing, t.marketingDescDetailed));
+      chmCustomize.appendChild(chmCats);
+
+      var chmCustomActions = document.createElement('div');
+      chmCustomActions.className = 'cc-actions cc-end';
+
+      var chmSaveBtn = document.createElement('button');
+      chmSaveBtn.textContent = t.saveSelection;
+      chmSaveBtn.addEventListener('click', function () {
+        var picked = { necessary: true, preferences: true };
+        var inputs = el.querySelectorAll('.cc-toggle input[data-cat]');
+        for (var i = 0; i < inputs.length; i++) {
+          picked[inputs[i].dataset.cat] = inputs[i].checked;
+        }
+        applyConsent(picked);
+      });
+
+      var chmAcceptAllBtn = document.createElement('button');
+      chmAcceptAllBtn.className = 'cc-primary';
+      chmAcceptAllBtn.textContent = t.acceptAll;
+      chmAcceptAllBtn.addEventListener('click', function () {
+        applyConsent({ necessary: true, preferences: true, statistics: true, marketing: true });
+      });
+
+      chmCustomActions.appendChild(chmSaveBtn);
+      chmCustomActions.appendChild(chmAcceptAllBtn);
+      chmCustomize.appendChild(chmCustomActions);
+
+      el.appendChild(chmCustomize);
     } else {
       var defaultActions = document.createElement('div');
       defaultActions.className = 'cc-actions cc-default-actions';

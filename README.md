@@ -30,7 +30,7 @@ Script-Tag im `<head>` einbinden:
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@1.0.1/cc-plugin.min.js"
+  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@1.1.1/cc-plugin.min.js"
   data-mode="ch"
   data-lang="de"
   data-accent="#2563eb"
@@ -54,6 +54,7 @@ Alle Optionen werden als `data-*` Attribute am Script-Tag gesetzt.
 | `data-privacy-url` | URL | `/datenschutz` | Link zur Datenschutzerklärung |
 | `data-ga-id` | GA4 Measurement ID | — | Optional: aktiviert Consent Mode v2 |
 | `data-acknowledged` | `true` | — | Bestätigt Kenntnisnahme von [LICENSE](./LICENSE) und Disclaimer. Ohne dieses Attribut erscheint eine Warnung in der Browser-Konsole. |
+| `data-allow-marketing` | `true` | — | **Nur im CH-Modus relevant.** Aktiviert ein 3-Button-Layout (Ablehnen/Einstellungen/Akzeptieren) mit Marketing-Opt-in für nDSG-konformes Cross-Site-Profiling. Siehe [Abschnitt CH-Modus mit Marketing-Tools](#ch-modus-mit-marketing-tools). |
 
 ### Position und Größe
 
@@ -69,6 +70,39 @@ Reiner Hinweis-Banner mit "Akzeptieren"-Button und Link zur Datenschutzerklärun
 ### `eu` Modus (DSGVO – EU)
 
 Vollständiges Opt-in mit drei Buttons (Alles ablehnen / Einstellungen / Alles akzeptieren) und einem ausklappbaren Customize-Panel. Standardmäßig sind nur die notwendigen Cookies aktiv. Erst nach expliziter Zustimmung werden weitere Kategorien aktiviert.
+
+### CH-Modus mit Marketing-Tools
+
+Mit `data-allow-marketing="true"` zeigt der CH-Banner stattdessen ein **3-Button-Layout** mit symmetrischen Wahlmöglichkeiten:
+
+- **„Ablehnen"** → keine Statistik, kein Marketing
+- **„Einstellungen"** → Customize-Panel mit granularen Toggles (Statistik default-on, Marketing default-off)
+- **„Akzeptieren"** → alle Kategorien aktiv inkl. Marketing
+
+Wann verwenden? Sobald auf der Seite **Marketing-Tools wie Meta Pixel, Google Ads, TikTok Pixel oder LinkedIn Insight** eingebunden sind. Solche Cross-Site-Profiling-Tools fallen unter Art. 5 lit. g + Art. 22 nDSG („Bearbeitung mit hohem Risiko") und benötigen nach EDÖB-Praxis eine ausdrückliche Einwilligung — ein rein informativer Banner reicht hier nicht.
+
+**Wann NICHT verwenden?** Auf reinen Analytics-Setups (z.B. nur GA4 mit anonymisierten IPs) ohne Marketing-Tools — dort genügt der Standard-CH-Modus. Marketing-Toggle wäre dann irreführend.
+
+**Pixel-Code richtig einbinden** — im Webflow-Custom-Code, nicht im Head:
+
+```html
+<script>
+document.addEventListener('cc:change', function (e) {
+  if (e.detail.marketing && !window._pixelLoaded) {
+    window._pixelLoaded = true;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID');
+    fbq('track', 'PageView');
+  }
+});
+</script>
+```
+
+Der Pixel lädt erst nach expliziter Zustimmung. Das `cc:change` Event vom Plugin ist genau dafür da.
 
 ## Kategorien
 
