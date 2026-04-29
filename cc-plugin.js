@@ -20,7 +20,12 @@
   var d = scriptEl.dataset;
   var config = Object.freeze({
     mode: d.mode === 'eu' ? 'eu' : 'ch',
-    lang: ['de', 'en', 'fr', 'it'].indexOf(d.lang) !== -1 ? d.lang : 'de',
+    lang: (function() {
+      var supported = ['de', 'en', 'fr', 'it'];
+      if (supported.indexOf(d.lang) !== -1) return d.lang;
+      var htmlLang = (document.documentElement.lang || '').slice(0, 2).toLowerCase();
+      return supported.indexOf(htmlLang) !== -1 ? htmlLang : 'de';
+    })(),
     accent: d.accent || '#2563eb',
     bg: d.bg || '#ffffff',
     position: ['bottom', 'top', 'bottom-left', 'bottom-right'].indexOf(d.position) !== -1 ? d.position : 'bottom',

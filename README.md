@@ -30,7 +30,7 @@ Script-Tag im `<head>` einbinden:
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@1.1.1/cc-plugin.min.js"
+  src="https://cdn.jsdelivr.net/gh/alahji7/cc-plugin@v1.0.0/cc-plugin.min.js"
   data-mode="ch"
   data-lang="de"
   data-accent="#2563eb"
@@ -41,6 +41,8 @@ Script-Tag im `<head>` einbinden:
 ></script>
 ```
 
+Für Entwicklung/Staging kann `@main` verwendet werden, um immer den neuesten Stand zu laden — kombiniert mit dem jsDelivr Purge-Endpoint lässt sich der Cache bei Bedarf sofort leeren (siehe [Versioning](#versioning)).
+
 ## Konfiguration
 
 Alle Optionen werden als `data-*` Attribute am Script-Tag gesetzt.
@@ -48,7 +50,7 @@ Alle Optionen werden als `data-*` Attribute am Script-Tag gesetzt.
 | Attribut | Werte | Default | Beschreibung |
 |----------|-------|---------|--------------|
 | `data-mode` | `ch` \| `eu` | `ch` | Compliance-Modus |
-| `data-lang` | `de` \| `en` \| `fr` \| `it` | `de` | Banner-Sprache |
+| `data-lang` | `de` \| `en` \| `fr` \| `it` | auto | Banner-Sprache. Wird automatisch aus `<html lang>` erkannt — nützlich für mehrsprachige Sites (z.B. Webflow Localization). Explizites `data-lang` hat Vorrang. |
 | `data-accent` | CSS-Farbe | `#2563eb` | Akzentfarbe für Buttons |
 | `data-position` | `bottom` \| `top` \| `bottom-left` \| `bottom-right` | `bottom` | Position und Größe |
 | `data-privacy-url` | URL | `/datenschutz` | Link zur Datenschutzerklärung |
@@ -169,6 +171,8 @@ Drittanbieter-Inhalte werden automatisch geblockt, bis die passende Kategorie zu
 
 Wichtig: Die URL gehört in `data-src`, **nicht** in `src`. Das Plugin verschiebt den Wert automatisch in `src`, sobald Consent vorliegt.
 
+> **Erstbesuch-Verhalten:** Embeds werden auf dem ersten Seitenbesuch immer geblockt, bis der Benutzer aktiv eine Wahl getroffen hat — auch im CH-Modus, wo Statistiken standardmäßig aktiv sind. Erst nach gespeichertem Consent wird der Embed automatisch freigeschaltet.
+
 ### Override pro Element
 
 Wenn ein Element zu einer anderen Kategorie gehören soll:
@@ -229,10 +233,20 @@ Anpassen pro Kunde: ggf. Hinweis auf eingebundene Drittanbieter (Google Analytic
 
 ## Versioning
 
-Das Plugin folgt [Semantic Versioning](https://semver.org/lang/de/). Versionen werden über Git-Tags veröffentlicht und sind über jsDelivr unveränderlich abrufbar:
+Das Plugin folgt [Semantic Versioning](https://semver.org/lang/de/). Versionen werden über Git-Tags veröffentlicht und sind über jsDelivr abrufbar:
 
-- **Pinned (empfohlen):** `@1.0.1` — fixe Version, ändert sich nie
-- **Major-pinned:** `@1` — automatische Patch-Updates innerhalb der Major-Version
+- **Pinned (empfohlen für Produktion):** `@v1.0.0` — fixe Version, ändert sich nie
+- **Branch (für Entwicklung/Staging):** `@main` — immer der neueste Stand
+
+### Cache leeren bei `@main`
+
+jsDelivr cached Branch-Referenzen. Nach einem neuen Push kann der Cache sofort geleert werden:
+
+```
+https://purge.jsdelivr.net/gh/alahji7/cc-plugin@main/cc-plugin.min.js
+```
+
+Neue Git-Tags brauchen bis zu 24h für die CDN-Propagation — für sofortige Verfügbarkeit daher `@main` mit Purge verwenden.
 
 Siehe [CHANGELOG.md](./CHANGELOG.md) für die Versionshistorie.
 
