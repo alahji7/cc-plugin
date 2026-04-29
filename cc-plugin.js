@@ -1,4 +1,4 @@
-/* cc-plugin v1.1.4 | MIT | https://github.com/alahji7/cc-plugin */
+/* cc-plugin v1.1.5 | MIT | https://github.com/alahji7/cc-plugin */
 (function () {
   'use strict';
 
@@ -604,12 +604,17 @@
       placeholder.parentNode.removeChild(placeholder);
     }
     var src = el.getAttribute('data-src');
-    el.removeAttribute('loading'); // prevent lazy-load deferral after display change
     el.style.display = '';
     delete el.dataset.ccBlocked;
     if (src) {
-      el.removeAttribute('data-src'); // clear before setting src so no other script resets it
-      requestAnimationFrame(function () { el.setAttribute('src', src); });
+      // data-cc may be on a wrapper div (e.g. Webflow w-embed) rather than the
+      // iframe itself — find the actual iframe to receive the src.
+      var target = el.tagName === 'IFRAME' ? el : el.querySelector('iframe');
+      if (target) {
+        target.removeAttribute('loading');
+        if (target === el) el.removeAttribute('data-src');
+        requestAnimationFrame(function () { target.setAttribute('src', src); });
+      }
     }
   }
 
@@ -621,11 +626,14 @@
       var category = categoryForElement(el);
       if (consent[category]) {
         if (el.dataset.ccBlocked === '1') unblockElement(el);
-        else if (!el.getAttribute('src') && el.getAttribute('data-src')) {
+        else if (el.getAttribute('data-src')) {
           var lazySrc = el.getAttribute('data-src');
-          el.removeAttribute('loading');
-          el.removeAttribute('data-src');
-          el.setAttribute('src', lazySrc);
+          var lazyTarget = el.tagName === 'IFRAME' ? el : el.querySelector('iframe');
+          if (lazyTarget && !lazyTarget.getAttribute('src')) {
+            lazyTarget.removeAttribute('loading');
+            if (lazyTarget === el) el.removeAttribute('data-src');
+            lazyTarget.setAttribute('src', lazySrc);
+          }
         }
       } else {
         blockElement(el);
