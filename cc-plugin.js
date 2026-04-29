@@ -281,7 +281,7 @@
       '#cc-banner.cc-show-customize .cc-customize{display:block}',
       '#cc-banner.cc-show-customize .cc-default-actions{display:none}',
       '@media (max-width:600px){',
-        '#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-top,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{width:80%;left:50%;right:auto;transform:translateX(-50%)}',
+        '#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-top,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{width:80%;left:10%;right:auto;transform:none}',
         '#cc-banner .cc-actions{flex-direction:column}',
         '#cc-banner .cc-actions button{width:100%}',
       '}',
