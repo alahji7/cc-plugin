@@ -1,4 +1,4 @@
-/* cc-plugin v1.1.2 | MIT | https://github.com/alahji7/cc-plugin */
+/* cc-plugin v1.1.3 | MIT | https://github.com/alahji7/cc-plugin */
 (function () {
   'use strict';
 
@@ -604,9 +604,17 @@
       placeholder.parentNode.removeChild(placeholder);
     }
     var src = el.getAttribute('data-src');
-    el.style.display = '';
     delete el.dataset.ccBlocked;
-    if (src) el.setAttribute('src', src);
+    if (src) {
+      // Replace with a clone so third-party scripts (e.g. Webflow's lazy
+      // loader) that watch the original element cannot clear the src again.
+      var clone = el.cloneNode(false);
+      clone.setAttribute('src', src);
+      clone.style.display = '';
+      el.parentNode.replaceChild(clone, el);
+    } else {
+      el.style.display = '';
+    }
   }
 
   function scanEmbeds() {
@@ -618,7 +626,10 @@
       if (consent[category]) {
         if (el.dataset.ccBlocked === '1') unblockElement(el);
         else if (!el.getAttribute('src') && el.getAttribute('data-src')) {
-          el.setAttribute('src', el.getAttribute('data-src'));
+          var lazySrc = el.getAttribute('data-src');
+          var lazyClone = el.cloneNode(false);
+          lazyClone.setAttribute('src', lazySrc);
+          el.parentNode.replaceChild(lazyClone, el);
         }
       } else {
         blockElement(el);

@@ -1,144 +1,229 @@
 <!doctype html>
 <html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>cc-plugin – Dev Sandbox</title>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; max-width: 860px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
-    h1 { font-size: 28px; margin-bottom: 8px; }
-    .meta { color: #6b7280; margin-bottom: 32px; }
-    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; padding: 16px; background: #f3f4f6; border-radius: 12px; }
-    .controls button { appearance: none; border: 1px solid #d1d5db; background: #fff; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; }
-    .controls button:hover { border-color: #2563eb; }
-    .controls .active { background: #2563eb; color: #fff; border-color: #2563eb; }
-    section { margin: 40px 0; }
-    section h2 { font-size: 20px; margin-bottom: 12px; }
-    iframe { width: 100%; height: 360px; border: 0; border-radius: 8px; }
-    .footer-link { display: inline-block; margin-top: 24px; color: #2563eb; cursor: pointer; }
-    code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-    pre { background: #1f2937; color: #f3f4f6; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <h1>cc-plugin – Dev Sandbox</h1>
-  <p class="meta">
-    Aktueller Modus: <strong id="current-mode">…</strong> · Sprache: <strong id="current-lang">…</strong> · Position: <strong id="current-position">…</strong>
-  </p>
-
-  <div class="controls">
-    <strong style="margin-right: 8px; align-self: center;">Modus:</strong>
-    <button data-mode="ch">CH (nDSG)</button>
-    <button data-mode="ch-marketing">CH + Marketing</button>
-    <button data-mode="eu">EU (DSGVO)</button>
-    <strong style="margin-right: 8px; margin-left: 16px; align-self: center;">Sprache:</strong>
-    <button data-lang="de">DE</button>
-    <button data-lang="en">EN</button>
-    <button data-lang="fr">FR</button>
-    <button data-lang="it">IT</button>
-    <button id="reset-btn" style="margin-left: auto;">Reset Consent</button>
-  </div>
-
-  <div class="controls">
-    <strong style="margin-right: 8px; align-self: center;">Position:</strong>
-    <button data-position="bottom-left">Unten links (schmal)</button>
-    <button data-position="bottom">Unten mitte (breit)</button>
-    <button data-position="bottom-right">Unten rechts (schmal)</button>
-    <button data-position="top">Oben mitte (breit)</button>
-  </div>
-
-  <section>
-    <h2>YouTube-Embed (data-cc="youtube")</h2>
-    <p>Im EU-Modus ohne Marketing-Zustimmung wird ein Platzhalter angezeigt.</p>
-    <iframe
-      data-cc="youtube"
-      data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-      title="YouTube test"
-      allowfullscreen></iframe>
-  </section>
-
-  <section>
-    <h2>Google Maps Embed (data-cc="maps")</h2>
-    <p>Im EU-Modus ohne Statistik-Zustimmung wird ein Platzhalter angezeigt.</p>
-    <iframe
-      data-cc="maps"
-      data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2734.5!2d8.5417!3d47.3769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1"
-      title="Maps test"></iframe>
-  </section>
-
-  <section>
-    <h2>Aktueller Consent-Status</h2>
-    <pre id="status">…</pre>
-    <a class="footer-link" id="open-settings">Cookie-Einstellungen erneut öffnen</a>
-  </section>
-
-  <!-- Mode/lang loader: read query string, inject script accordingly -->
-  <script>
-    (function () {
-      var params = new URLSearchParams(location.search);
-      var modeParam = params.get('mode') || 'eu';
-      // ch-marketing ist eine Sandbox-Convenience: setzt mode=ch + allowMarketing=true
-      var actualMode = modeParam === 'ch-marketing' ? 'ch' : modeParam;
-      var allowMarketing = modeParam === 'ch-marketing';
-      var lang = params.get('lang') || 'de';
-      var position = params.get('position') || 'bottom';
-
-      document.getElementById('current-mode').textContent = modeParam;
-      document.getElementById('current-lang').textContent = lang;
-      document.getElementById('current-position').textContent = position;
-      document.querySelectorAll('button[data-mode]').forEach(function (b) {
-        if (b.dataset.mode === modeParam) b.classList.add('active');
-        b.addEventListener('click', function () {
-          try { localStorage.removeItem('cc_consent'); } catch (e) {}
-          params.set('mode', b.dataset.mode);
-          location.search = params.toString();
-        });
-      });
-      document.querySelectorAll('button[data-lang]').forEach(function (b) {
-        if (b.dataset.lang === lang) b.classList.add('active');
-        b.addEventListener('click', function () {
-          params.set('lang', b.dataset.lang);
-          location.search = params.toString();
-        });
-      });
-      document.querySelectorAll('button[data-position]').forEach(function (b) {
-        if (b.dataset.position === position) b.classList.add('active');
-        b.addEventListener('click', function () {
-          try { localStorage.removeItem('cc_consent'); } catch (e) {}
-          params.set('position', b.dataset.position);
-          location.search = params.toString();
-        });
-      });
-      document.getElementById('reset-btn').addEventListener('click', function () {
-        try { localStorage.removeItem('cc_consent'); } catch (e) {}
-        location.reload();
-      });
-
-      var s = document.createElement('script');
-      s.src = 'cc-plugin.js';
-      s.setAttribute('data-mode', actualMode);
-      s.setAttribute('data-lang', lang);
-      s.setAttribute('data-accent', '#2563eb');
-      s.setAttribute('data-position', position);
-      s.setAttribute('data-privacy-url', '/datenschutz');
-      s.setAttribute('data-acknowledged', 'true');
-      if (allowMarketing) s.setAttribute('data-allow-marketing', 'true');
-      document.head.appendChild(s);
-
-      function refreshStatus() {
-        var raw = localStorage.getItem('cc_consent');
-        document.getElementById('status').textContent = raw
-          ? JSON.stringify(JSON.parse(raw), null, 2)
-          : '(noch keine Zustimmung gespeichert)';
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>cc-plugin – Dev Sandbox</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        max-width: 860px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #1a1a1a;
       }
-      document.addEventListener('cc:change', refreshStatus);
-      window.addEventListener('load', refreshStatus);
+      h1 {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      .meta {
+        color: #6b7280;
+        margin-bottom: 32px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+        padding: 16px;
+        background: #f3f4f6;
+        border-radius: 12px;
+      }
+      .controls button {
+        appearance: none;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .controls button:hover {
+        border-color: #2563eb;
+      }
+      .controls .active {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+      }
+      section {
+        margin: 40px 0;
+      }
+      section h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+      iframe {
+        width: 100%;
+        height: 360px;
+        border: 0;
+        border-radius: 8px;
+      }
+      .footer-link {
+        display: inline-block;
+        margin-top: 24px;
+        color: #2563eb;
+        cursor: pointer;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+      pre {
+        background: #1f2937;
+        color: #f3f4f6;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>cc-plugin – Dev Sandbox</h1>
+    <p class="meta">
+      Aktueller Modus: <strong id="current-mode">…</strong> · Sprache:
+      <strong id="current-lang">…</strong> · Position:
+      <strong id="current-position">…</strong>
+    </p>
 
-      document.getElementById('open-settings').addEventListener('click', function (e) {
-        e.preventDefault();
-        if (window.ccConsent) window.ccConsent.open();
-      });
-    })();
-  </script>
-</body>
+    <div class="controls">
+      <strong style="margin-right: 8px; align-self: center">Modus:</strong>
+      <button data-mode="ch">CH (nDSG)</button>
+      <button data-mode="ch-marketing">CH + Marketing</button>
+      <button data-mode="eu">EU (DSGVO)</button>
+      <strong style="margin-right: 8px; margin-left: 16px; align-self: center"
+        >Sprache:</strong
+      >
+      <button data-lang="de">DE</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="it">IT</button>
+      <button id="reset-btn" style="margin-left: auto">Reset Consent</button>
+    </div>
+
+    <div class="controls">
+      <strong style="margin-right: 8px; align-self: center">Position:</strong>
+      <button data-position="bottom-left">Unten links (schmal)</button>
+      <button data-position="bottom">Unten mitte (breit)</button>
+      <button data-position="bottom-right">Unten rechts (schmal)</button>
+      <button data-position="top">Oben mitte (breit)</button>
+    </div>
+
+    <section>
+      <h2>YouTube-Embed (data-cc="youtube")</h2>
+      <p>
+        Im EU-Modus ohne Marketing-Zustimmung wird ein Platzhalter angezeigt.
+      </p>
+      <iframe
+        data-cc="youtube"
+        data-src="https://www.youtube.com/watch?v=wLX6BsmxTq4&list=RDwLX6BsmxTq4&start_radio=1"
+        title="YouTube test"
+        allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <h2>Google Maps Embed (data-cc="maps")</h2>
+      <p>
+        Im EU-Modus ohne Statistik-Zustimmung wird ein Platzhalter angezeigt.
+      </p>
+      <iframe
+        data-cc="maps"
+        data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2734.5!2d8.5417!3d47.3769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1"
+        title="Maps test"></iframe>
+    </section>
+
+    <section>
+      <h2>Aktueller Consent-Status</h2>
+      <pre id="status">…</pre>
+      <a class="footer-link" id="open-settings"
+        >Cookie-Einstellungen erneut öffnen</a
+      >
+    </section>
+    <!-- Mode/lang loader: read query string, inject script accordingly -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var modeParam = params.get("mode") || "eu";
+        // ch-marketing ist eine Sandbox-Convenience: setzt mode=ch + allowMarketing=true
+        var actualMode = modeParam === "ch-marketing" ? "ch" : modeParam;
+        var allowMarketing = modeParam === "ch-marketing";
+        var lang = params.get("lang") || "de";
+        var position = params.get("position") || "bottom";
+
+        document.getElementById("current-mode").textContent = modeParam;
+        document.getElementById("current-lang").textContent = lang;
+        document.getElementById("current-position").textContent = position;
+        document.querySelectorAll("button[data-mode]").forEach(function (b) {
+          if (b.dataset.mode === modeParam) b.classList.add("active");
+          b.addEventListener("click", function () {
+            try {
+              localStorage.removeItem("cc_consent");
+            } catch (e) {}
+            params.set("mode", b.dataset.mode);
+            location.search = params.toString();
+          });
+        });
+        document.querySelectorAll("button[data-lang]").forEach(function (b) {
+          if (b.dataset.lang === lang) b.classList.add("active");
+          b.addEventListener("click", function () {
+            params.set("lang", b.dataset.lang);
+            location.search = params.toString();
+          });
+        });
+        document
+          .querySelectorAll("button[data-position]")
+          .forEach(function (b) {
+            if (b.dataset.position === position) b.classList.add("active");
+            b.addEventListener("click", function () {
+              try {
+                localStorage.removeItem("cc_consent");
+              } catch (e) {}
+              params.set("position", b.dataset.position);
+              location.search = params.toString();
+            });
+          });
+        document
+          .getElementById("reset-btn")
+          .addEventListener("click", function () {
+            try {
+              localStorage.removeItem("cc_consent");
+            } catch (e) {}
+            location.reload();
+          });
+
+        var s = document.createElement("script");
+        s.src = "cc-plugin.js";
+        s.setAttribute("data-mode", actualMode);
+        s.setAttribute("data-lang", lang);
+        s.setAttribute("data-accent", "#2563eb");
+        s.setAttribute("data-position", position);
+        s.setAttribute("data-privacy-url", "/datenschutz");
+        s.setAttribute("data-acknowledged", "true");
+        if (allowMarketing) s.setAttribute("data-allow-marketing", "true");
+        document.head.appendChild(s);
+
+        function refreshStatus() {
+          var raw = localStorage.getItem("cc_consent");
+          document.getElementById("status").textContent = raw
+            ? JSON.stringify(JSON.parse(raw), null, 2)
+            : "(noch keine Zustimmung gespeichert)";
+        }
+        document.addEventListener("cc:change", refreshStatus);
+        window.addEventListener("load", refreshStatus);
+
+        document
+          .getElementById("open-settings")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            if (window.ccConsent) window.ccConsent.open();
+          });
+      })();
+    </script>
+  </body>
 </html>
