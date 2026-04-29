@@ -83,26 +83,61 @@ Wann verwenden? Sobald auf der Seite **Marketing-Tools wie Meta Pixel, Google Ad
 
 **Wann NICHT verwenden?** Auf reinen Analytics-Setups (z.B. nur GA4 mit anonymisierten IPs) ohne Marketing-Tools — dort genügt der Standard-CH-Modus. Marketing-Toggle wäre dann irreführend.
 
-**Pixel-Code richtig einbinden** — im Webflow-Custom-Code, nicht im Head:
+**Pixel-Code richtig einbinden** — Webflow → Site Settings → Custom Code → **Footer Code** (vor `</body>`):
 
 ```html
+<!-- Meta Pixel mit cc-plugin Consent-Gate -->
 <script>
-document.addEventListener('cc:change', function (e) {
-  if (e.detail.marketing && !window._pixelLoaded) {
-    window._pixelLoaded = true;
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'YOUR_PIXEL_ID');
+(function () {
+  var loaded = false;
+
+  function loadPixel() {
+    if (loaded) return;
+    loaded = true;
+
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'DEINE_PIXEL_ID');
     fbq('track', 'PageView');
   }
-});
+
+  // Szenario A: User akzeptiert jetzt im Banner
+  document.addEventListener('cc:change', function (e) {
+    if (e.detail.marketing) loadPixel();
+  });
+
+  // Szenario B: User hat bereits früher akzeptiert (Consent in localStorage)
+  function checkExisting() {
+    if (window.ccConsent && window.ccConsent.getConsent().marketing) {
+      loadPixel();
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkExisting);
+  } else {
+    checkExisting();
+  }
+})();
 </script>
+<!-- noscript-Fallback bewusst entfernt: kann nicht consent-gated werden → DSGVO-Verstoss -->
 ```
 
-Der Pixel lädt erst nach expliziter Zustimmung. Das `cc:change` Event vom Plugin ist genau dafür da.
+Anpassen: `DEINE_PIXEL_ID` durch die echte Pixel-ID aus dem Meta Business Manager ersetzen.
+
+**Wichtig — was am originalen Meta-Snippet anders ist:**
+
+1. Der gesamte `fbq`-Loader-Code wurde in eine `loadPixel()`-Funktion verpackt — wird nur ausgeführt nach Consent-Prüfung
+2. `<noscript>`-Fallback **wurde entfernt** — der würde sonst den Pixel auch ohne JavaScript und ohne Consent feuern
+3. Zwei Trigger: `cc:change`-Event (Erstbesuch) UND `checkExisting()` (wiederkehrender Besuch mit gespeichertem Consent)
+4. Schutz vor Mehrfach-Ladung via `loaded`-Flag
+
+Dasselbe Pattern funktioniert analog für andere Marketing-Tracker (Google Ads, LinkedIn Insight, TikTok Pixel) — `e.detail.marketing` ist der gemeinsame Schalter.
 
 ## Kategorien
 

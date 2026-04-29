@@ -1,4 +1,4 @@
-/* cc-plugin v1.1.1 | MIT | https://github.com/alahji7/cc-plugin */
+/* cc-plugin v1.1.2 | MIT | https://github.com/alahji7/cc-plugin */
 (function () {
   'use strict';
 
@@ -22,6 +22,7 @@
     mode: d.mode === 'eu' ? 'eu' : 'ch',
     lang: ['de', 'en', 'fr', 'it'].indexOf(d.lang) !== -1 ? d.lang : 'de',
     accent: d.accent || '#2563eb',
+    bg: d.bg || '#ffffff',
     position: ['bottom', 'top', 'bottom-left', 'bottom-right'].indexOf(d.position) !== -1 ? d.position : 'bottom',
     privacyUrl: d.privacyUrl || '/datenschutz',
     gaId: d.gaId || '',
@@ -237,7 +238,7 @@
     var css = [
       ':root{',
         '--cc-accent:', config.accent, ';',
-        '--cc-bg:#ffffff;',
+        '--cc-bg:', config.bg, ';',
         '--cc-text:#1a1a1a;',
         '--cc-muted:#6b7280;',
         '--cc-border:#e5e7eb;',
@@ -253,6 +254,7 @@
       '#cc-banner.cc-pos-bottom-left{left:20px;bottom:20px;width:calc(100% - 40px);max-width:420px}',
       '#cc-banner.cc-pos-bottom-right{right:20px;bottom:20px;width:calc(100% - 40px);max-width:420px}',
       '#cc-banner.cc-mode-ch.cc-pos-bottom,#cc-banner.cc-mode-ch.cc-pos-top{max-width:520px}',
+      '#cc-banner.cc-marketing{max-width:460px}',
       '#cc-banner h2{font-size:16px;font-weight:600;margin:0 0 8px}',
       '#cc-banner p{margin:0 0 12px;color:var(--cc-text)}',
       '#cc-banner a{color:var(--cc-accent);text-decoration:underline}',
@@ -347,7 +349,7 @@
 
     var el = document.createElement('div');
     el.id = 'cc-banner';
-    el.className = 'cc-pos-' + config.position + ' cc-mode-' + config.mode;
+    el.className = 'cc-pos-' + config.position + ' cc-mode-' + config.mode + (config.mode === 'ch' && config.allowMarketing ? ' cc-marketing' : '');
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-live', 'polite');
     el.setAttribute('aria-label', config.mode === 'ch' ? t.chTitle : t.euTitle);
@@ -602,9 +604,9 @@
       placeholder.parentNode.removeChild(placeholder);
     }
     var src = el.getAttribute('data-src');
-    if (src) el.setAttribute('src', src);
     el.style.display = '';
     delete el.dataset.ccBlocked;
+    if (src) el.setAttribute('src', src);
   }
 
   function scanEmbeds() {
