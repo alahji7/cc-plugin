@@ -280,7 +280,7 @@
       '#cc-banner .cc-customize{display:none}',
       '#cc-banner.cc-show-customize .cc-customize{display:block}',
       '#cc-banner.cc-show-customize .cc-default-actions{display:none}',
-      '@supports (height:1svh){#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{bottom:calc(100lvh - 100svh + 20px)}}',
+      '@supports (bottom:env(safe-area-inset-bottom)){#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{bottom:calc(env(safe-area-inset-bottom) + 20px)}}',
       '@media (max-width:600px){',
         '#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-top,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{left:5vw;right:auto;width:90vw;transform:none}',
         '#cc-banner .cc-actions{flex-direction:column}',
