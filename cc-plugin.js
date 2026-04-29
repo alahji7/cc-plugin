@@ -48,11 +48,11 @@
   // ────────────────────────────────────────────────────────────────────
   var i18n = {
     de: {
-      chTitle: 'Datenschutzhinweis',
+      chTitle: 'Cookies & Datenschutz',
       chBody: 'Diese Website verwendet Cookies, um Ihnen das beste Erlebnis zu bieten.',
       chBodyMarketing: 'Diese Website verwendet Cookies für Statistik und Marketing. Sie können einzelne Kategorien jederzeit deaktivieren.',
       marketingDescDetailed: 'Personalisierte Werbung und Cross-Site-Profiling (z.B. Meta Pixel).',
-      euTitle: 'Wir verwenden Cookies',
+      euTitle: 'Cookies & Datenschutz',
       euBody: 'Wir nutzen Cookies und ähnliche Technologien, um Inhalte und Funktionen bereitzustellen. Sie können selbst entscheiden, welche Kategorien Sie zulassen möchten.',
       privacyLink: 'Datenschutzerklärung',
       accept: 'Akzeptieren',
@@ -73,11 +73,11 @@
       loadContent: 'Inhalt laden'
     },
     en: {
-      chTitle: 'Privacy notice',
+      chTitle: 'Cookies & Privacy',
       chBody: 'This website uses cookies to provide you with the best experience.',
       chBodyMarketing: 'This website uses cookies for statistics and marketing. You can disable individual categories at any time.',
       marketingDescDetailed: 'Personalised advertising and cross-site profiling (e.g. Meta Pixel).',
-      euTitle: 'We use cookies',
+      euTitle: 'Cookies & Privacy',
       euBody: 'We use cookies and similar technologies to provide content and features. You can choose which categories to allow.',
       privacyLink: 'Privacy policy',
       accept: 'Accept',
@@ -98,11 +98,11 @@
       loadContent: 'Load content'
     },
     fr: {
-      chTitle: 'Avis de confidentialité',
+      chTitle: 'Cookies & Confidentialité',
       chBody: 'Ce site utilise des cookies pour vous offrir la meilleure expérience.',
       chBodyMarketing: 'Ce site utilise des cookies à des fins statistiques et marketing. Vous pouvez désactiver chaque catégorie à tout moment.',
       marketingDescDetailed: 'Publicité personnalisée et profilage entre sites (p.ex. Meta Pixel).',
-      euTitle: 'Nous utilisons des cookies',
+      euTitle: 'Cookies & Confidentialité',
       euBody: 'Nous utilisons des cookies et des technologies similaires pour fournir du contenu et des fonctionnalités. Vous pouvez choisir les catégories à autoriser.',
       privacyLink: 'Politique de confidentialité',
       accept: 'Accepter',
@@ -123,11 +123,11 @@
       loadContent: 'Charger le contenu'
     },
     it: {
-      chTitle: 'Informativa sulla privacy',
+      chTitle: 'Cookie & Privacy',
       chBody: 'Questo sito utilizza cookie per offrirti la migliore esperienza.',
       chBodyMarketing: 'Questo sito utilizza cookie a fini statistici e di marketing. Puoi disattivare singole categorie in qualsiasi momento.',
       marketingDescDetailed: 'Pubblicità personalizzata e profilazione tra siti (es. Meta Pixel).',
-      euTitle: 'Utilizziamo i cookie',
+      euTitle: 'Cookie & Privacy',
       euBody: 'Utilizziamo cookie e tecnologie simili per fornire contenuti e funzionalità. Puoi scegliere quali categorie consentire.',
       privacyLink: 'Informativa sulla privacy',
       accept: 'Accetta',
