@@ -281,7 +281,7 @@
       '#cc-banner.cc-show-customize .cc-customize{display:block}',
       '#cc-banner.cc-show-customize .cc-default-actions{display:none}',
       '@media (max-width:600px){',
-        '#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-top,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{width:80%;left:10%;right:auto;transform:none}',
+        '#cc-banner.cc-pos-bottom,#cc-banner.cc-pos-top,#cc-banner.cc-pos-bottom-left,#cc-banner.cc-pos-bottom-right{left:10vw;right:10vw;width:auto;transform:none}',
         '#cc-banner .cc-actions{flex-direction:column}',
         '#cc-banner .cc-actions button{width:100%}',
       '}',
@@ -620,12 +620,13 @@
   }
 
   function scanEmbeds() {
-    var consent = getConsent() || getDefaults(config.mode);
+    var stored = getConsent();
+    var consent = stored || getDefaults(config.mode);
     var nodes = document.querySelectorAll('[data-cc]');
     for (var i = 0; i < nodes.length; i++) {
       var el = nodes[i];
       var category = categoryForElement(el);
-      if (consent[category]) {
+      if (stored && consent[category]) {
         if (el.dataset.ccBlocked === '1') unblockElement(el);
         else if (el.getAttribute('data-src')) {
           var lazySrc = el.getAttribute('data-src');
